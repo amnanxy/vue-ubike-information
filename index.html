@@ -9,6 +9,11 @@
 
   <style>
     body{ padding: 1em;  }
+    
+    .sort-column{
+      color: blue;
+      cursor: pointer;
+    }
   </style>
 
 </head>
@@ -28,13 +33,17 @@
           <th>#</th>
           <th>場站名稱</th>
           <th>場站區域</th>
-          <th>目前可用車輛</th>
-          <th>總停車格</th>
+          <th>
+            <span class="sort-column" @click="sortBy('sbi')">目前可用車輛</span>
+          </th>
+          <th>
+            <span class="sort-column" @click="sortBy('tot')">總停車格</span>
+          </th>
           <th>資料更新時間</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="s in filteredStops">
+        <tr v-for="s in sortedStops">
           <td>{{ s.sno }}</td>
           <td>{{ s.sna }}</td>
           <td>{{ s.sarea }}</td>

@@ -3,11 +3,12 @@ const vm = Vue.createApp({
         return {
             ubikeStops: [],
             searchStop: '',
+            isAscSort: true,
+            sortProp: '',
         }
     },
     methods: {
         timeFormat(t) {
-
             var date = [], time = [];
 
             date.push(t.substr(0, 4));
@@ -18,14 +19,35 @@ const vm = Vue.createApp({
             time.push(t.substr(12, 2));
 
             return date.join("/") + ' ' + time.join(":");
+        },
+        sortBy(prop) {
+            if (this.sortProp !== prop) {
+                this.sortProp = prop;
+            } else {
+                this.isAscSort = !this.isAscSort;
+            }
         }
     },
     computed: {
         filteredStops() {
             if (this.searchStop === '') {
-                return this.ubikeStops;
+                return [...this.ubikeStops];
             } else {
                 return this.ubikeStops.filter(stop => stop.sna.includes(this.searchStop));
+            }
+        },
+        sortedStops() {
+            let prop = this.sortProp;
+            let stops = this.filteredStops;
+            
+            if (!prop) {
+                return stops;
+            }
+
+            if (this.isAscSort) {
+                return stops.sort((a, b) => a[prop] - b[prop]);
+            } else {
+                return stops.sort((a, b) => b[prop] - a[prop]);
             }
         }
     },
