@@ -1,7 +1,8 @@
 const vm = Vue.createApp({
     data() {
         return {
-            ubikeStops: []
+            ubikeStops: [],
+            searchStop: '',
         }
     },
     methods: {
@@ -17,6 +18,15 @@ const vm = Vue.createApp({
             time.push(t.substr(12, 2));
 
             return date.join("/") + ' ' + time.join(":");
+        }
+    },
+    computed: {
+        filteredStops() {
+            if (this.searchStop === '') {
+                return this.ubikeStops;
+            } else {
+                return this.ubikeStops.filter(stop => stop.sna.includes(this.searchStop));
+            }
         }
     },
     created() {

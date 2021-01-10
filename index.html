@@ -18,6 +18,10 @@
 
   <div id="app">
 
+    <p>
+      站點名稱搜尋: <input type="text" v-model="searchStop">
+    </p>
+
     <table class="table table-striped">
       <thead>
         <tr>
@@ -30,7 +34,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="s in ubikeStops">
+        <tr v-for="s in filteredStops">
           <td>{{ s.sno }}</td>
           <td>{{ s.sna }}</td>
           <td>{{ s.sarea }}</td>
