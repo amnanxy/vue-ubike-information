@@ -5,6 +5,8 @@ const vm = Vue.createApp({
             searchStop: '',
             isAscSort: true,
             sortProp: '',
+            currentPageNumber: 1,
+            pageSize: 20,
         }
     },
     methods: {
@@ -26,6 +28,14 @@ const vm = Vue.createApp({
             } else {
                 this.isAscSort = !this.isAscSort;
             }
+        },
+        showPage(pageNumber) {
+            this.currentPageNumber = pageNumber;
+        }
+    },
+    watch: {
+        filteredStops() {
+            this.currentPageNumber = 1;
         }
     },
     computed: {
@@ -39,7 +49,7 @@ const vm = Vue.createApp({
         sortedStops() {
             let prop = this.sortProp;
             let stops = this.filteredStops;
-            
+
             if (!prop) {
                 return stops;
             }
@@ -49,6 +59,15 @@ const vm = Vue.createApp({
             } else {
                 return stops.sort((a, b) => b[prop] - a[prop]);
             }
+        },
+        pagingStops() {
+            let startIdx = (this.currentPageNumber - 1) * this.pageSize;
+            let endIdx = this.currentPageNumber * this.pageSize - 1;
+
+            return this.sortedStops.slice(startIdx, endIdx);
+        },
+        totalPage() {
+            return Math.ceil(this.filteredStops.length / this.pageSize);
         }
     },
     created() {

@@ -10,9 +10,14 @@
   <style>
     body{ padding: 1em;  }
     
-    .sort-column{
+    .link{
       color: blue;
       cursor: pointer;
+    }
+    
+    .page-number{
+      margin: 10px;
+      display: inline-block;
     }
   </style>
 
@@ -21,7 +26,7 @@
 
   <h1>YouBike 臺北市公共自行車即時資訊</h1>
 
-  <div id="app">
+  <div id="app" style="padding: 10px">
 
     <p>
       站點名稱搜尋: <input type="text" v-model="searchStop">
@@ -34,16 +39,16 @@
           <th>場站名稱</th>
           <th>場站區域</th>
           <th>
-            <span class="sort-column" @click="sortBy('sbi')">目前可用車輛</span>
+            <span class="link" @click="sortBy('sbi')">目前可用車輛</span>
           </th>
           <th>
-            <span class="sort-column" @click="sortBy('tot')">總停車格</span>
+            <span class="link" @click="sortBy('tot')">總停車格</span>
           </th>
           <th>資料更新時間</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="s in sortedStops">
+        <tr v-for="s in pagingStops">
           <td>{{ s.sno }}</td>
           <td>{{ s.sna }}</td>
           <td>{{ s.sarea }}</td>
@@ -52,9 +57,18 @@
           <td>{{ timeFormat(s.mday) }}</td>
         </tr>
       </tbody>
-
     </table>
 
+    <div style="text-align: center">
+      <div v-for="number in totalPage" class="page-number">
+        <template v-if="number === currentPageNumber">
+          {{ number }}
+        </template>
+        <span v-else class="link" @click="showPage(number)">
+          {{ number }}
+        </span>
+      </div>
+    </div>
   </div>
 
   <script src="https://unpkg.com/vue@next"></script>
