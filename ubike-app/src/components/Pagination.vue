@@ -32,10 +32,8 @@ export default {
     }
   },
   watch: {
-    totalPage(newVal, oldVal) {
-      if (newVal < oldVal) {
-        this.showPage(1);
-      }
+    totalPage() {
+      this.showPage(1);
     },
   },
   methods: {
@@ -48,9 +46,6 @@ export default {
       this.$emit("update", startIdx, endIdx);
     }
   },
-  created() {
-    this.showPage(this.pageNumber);
-  }
 }
 
 </script>

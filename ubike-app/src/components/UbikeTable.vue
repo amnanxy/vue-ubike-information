@@ -6,10 +6,22 @@
       <th>場站名稱</th>
       <th>場站區域</th>
       <th>
-        <span class="link" @click="sortBy('sbi')">目前可用車輛</span>
+        <span class="link" @click="sortBy('sbi')">
+          目前可用車輛
+          <template v-if="sortProp === 'sbi'">
+            <i class="fa fa-sort-asc" aria-hidden="true" v-show="isAscSort"></i>
+            <i class="fa fa-sort-desc" aria-hidden="true" v-show="!isAscSort"></i>
+          </template>
+        </span>
       </th>
       <th>
-        <span class="link" @click="sortBy('tot')">總停車格</span>
+        <span class="link" @click="sortBy('tot')">
+          總停車格
+          <template v-if="sortProp === 'tot'">
+            <i class="fa fa-sort-asc" aria-hidden="true" v-show="isAscSort"></i>
+            <i class="fa fa-sort-desc" aria-hidden="true" v-show="!isAscSort"></i>
+          </template>
+        </span>
       </th>
       <th>資料更新時間</th>
     </tr>
@@ -37,11 +49,11 @@ export default {
     },
     stopStartIdx: {
       type: Number,
-      required: true
+      default: 0
     },
     stopEndIdx: {
       type: Number,
-      required: true
+      default: Number.MAX_SAFE_INTEGER
     },
   },
   data() {

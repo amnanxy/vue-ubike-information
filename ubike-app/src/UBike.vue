@@ -1,6 +1,6 @@
 <template>
   <h1>YouBike 臺北市公共自行車即時資訊</h1>
-  <!--  <search :stops="ubikeStops" @search=""></search>-->
+  
   <search :stops="ubikeStops" @update="setFilteredStops"></search>
   <ubike-table :stops="filteredStops" :stop-start-idx="stopStartIdx" :stop-end-idx="stopEndIdx"></ubike-table>
   <pagination :total="total" :page-size="20" @update="showItem"></pagination>
@@ -60,6 +60,7 @@ export default {
 
 <style>
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css";
+@import "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
 
 body {
   padding: 1em;
