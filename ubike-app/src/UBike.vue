@@ -1,5 +1,6 @@
 <template>
   <h1>YouBike 臺北市公共自行車即時資訊</h1>
+  <!--  <search :stops="ubikeStops" @search=""></search>-->
   <p>
     站點名稱搜尋: <input type="text" v-model="searchStop">
   </p>
@@ -30,27 +31,29 @@
     </tr>
     </tbody>
   </table>
-
-  <div style="text-align: center">
-    <div v-for="number in totalPage" :key="number" class="page-number">
-      <span :class="{'link': number !== currentPageNumber}" @click="showPage(number)">
-        {{ number }}
-      </span>
-    </div>
-  </div>
+  <pagination :total="total" :page-size="20" @update="showItem"></pagination>
 </template>
 
 <script>
+import Pagination from "@/components/Pagination";
+
 export default {
   name: "UBike",
+  components: {
+    pagination: Pagination
+  },
   data() {
     return {
       ubikeStops: [],
+
       searchStop: '',
+      
       isAscSort: true,
       sortProp: '',
-      currentPageNumber: 1,
-      pageSize: 20,
+
+      total: 0,
+      stopStartIdx: 0,
+      stopEndIdx: 0,
     }
   },
   methods: {
@@ -73,14 +76,15 @@ export default {
         this.isAscSort = !this.isAscSort;
       }
     },
-    showPage(pageNumber) {
-      this.currentPageNumber = pageNumber;
-    }
+    showItem(startIdx, endIdx) {
+      this.stopStartIdx = startIdx;
+      this.stopEndIdx = endIdx;
+    },
   },
   watch: {
     filteredStops() {
-      this.currentPageNumber = 1;
-    }
+      this.total = this.filteredStops.length;
+    },
   },
   computed: {
     filteredStops() {
@@ -101,13 +105,7 @@ export default {
       }
     },
     pagingStops() {
-      let startIdx = (this.currentPageNumber - 1) * this.pageSize;
-      let endIdx = this.currentPageNumber * this.pageSize - 1;
-
-      return this.sortedStops.slice(startIdx, endIdx);
-    },
-    totalPage() {
-      return Math.ceil(this.filteredStops.length / this.pageSize);
+      return this.sortedStops.slice(this.stopStartIdx, this.stopEndIdx);
     }
   },
   created() {
@@ -131,7 +129,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css";
 
 body {
