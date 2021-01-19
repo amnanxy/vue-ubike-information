@@ -1,49 +1,40 @@
 <template>
   <h1>YouBike 臺北市公共自行車即時資訊</h1>
   <!--  <search :stops="ubikeStops" @search=""></search>-->
-  <p>
-    站點名稱搜尋: <input type="text" v-model="searchStop">
-  </p>
-
+  <search :stops="ubikeStops" @update="setFilteredStops"></search>
   <ubike-table :stops="filteredStops" :stop-start-idx="stopStartIdx" :stop-end-idx="stopEndIdx"></ubike-table>
   <pagination :total="total" :page-size="20" @update="showItem"></pagination>
 </template>
 
 <script>
+import Search from "@/components/Search";
 import UbikeTable from "@/components/UbikeTable";
 import Pagination from "@/components/Pagination";
 
 export default {
   name: "UBike",
   components: {
+    search: Search,
     ubikeTable: UbikeTable,
     pagination: Pagination,
   },
   data() {
     return {
       ubikeStops: [],
-
-      searchStop: '',
-
+      filteredStops: [],
       total: 0,
       stopStartIdx: 0,
       stopEndIdx: 0,
     }
   },
   methods: {
+    setFilteredStops(stops) {
+      this.filteredStops = stops;
+      this.total = this.filteredStops.length;
+    },
     showItem(startIdx, endIdx) {
       this.stopStartIdx = startIdx;
       this.stopEndIdx = endIdx;
-    },
-  },
-  watch: {
-    filteredStops() {
-      this.total = this.filteredStops.length;
-    },
-  },
-  computed: {
-    filteredStops() {
-      return this.ubikeStops.filter(stop => stop.sna.includes(this.searchStop));
     },
   },
   created() {
